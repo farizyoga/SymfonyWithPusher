@@ -1,0 +1,22 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/service_container.html
+parameters:
+    pusher_app_id: 310033
+    pusher_key: 2d5c8c81e98812c40c2e
+    pusher_secret: 50250e7046b780159277
+
+services:
+    pusher:
+        class: AppBundle\Util\Pusher
+        arguments:
+            - "%pusher_app_id%"
+            - "%pusher_key%"
+            - "%pusher_secret%"
+
+    app.login.user_notifier:
+        class: AppBundle\Event\Listener\LoginSuccessListener
+        arguments:
+            - "@pusher"
+            - "@security.token_storage"
+        tags:
+            - { name: kernel.event_listener, event: security.interactive_login, method: onLoginSuccess }

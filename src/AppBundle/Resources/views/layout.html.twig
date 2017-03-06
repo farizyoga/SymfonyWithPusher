@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title></title>
+        <link rel="stylesheet" href="{{ asset('a/bootstrap/dist/css/bootstrap.css') }}" media="screen" title="no title" charset="utf-8">
+        {% block style %}{% endblock %}
+    </head>
+    <body>
+        {% block content %}{% endblock %}
+
+        <script src="{{ asset('a/jquery/dist/jquery.js') }}"></script>
+        <script src="{{ asset('a/bootstrap/dist/js/bootstrap.js') }}"></script>
+        <script src="https://js.pusher.com/4.0/pusher.min.js"></script>
+        <script>
+            Pusher.logToConsole = false;
+
+            var pusher = new Pusher('{{ pusher_key }}', {
+                cluster: 'ap1',
+                encrypted: true
+            });
+
+            var channel = pusher.subscribe('app');
+            channel.bind('global', function(data) {
+                console.log(data);
+            })
+        </script>
+        {% block script %}{% endblock %}
+    </body>
+</html>
